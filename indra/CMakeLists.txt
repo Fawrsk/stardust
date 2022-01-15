@@ -81,8 +81,7 @@ if (WINDOWS)
     endif (EXISTS ${VIEWER_DIR}win_setup)
 endif (WINDOWS)
 
-# Startup project name for VS
-set(STARTUP_PROJECT_NAME "stardust-bin" CACHE STRING)
+set(STARTUP_PROJECT_NAME "stardust-bin" CACHE STRING "Startup project name for VS")
 
 # sets the 'startup project' for debugging from visual studio.
 set_property(
