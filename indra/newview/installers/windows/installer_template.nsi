@@ -99,9 +99,8 @@ SetOverwrite on							# Overwrite files by default
 AutoCloseWindow true					# After all files install, close window
 
 # Registry key paths, ours and Microsoft's
-!define LINDEN_KEY      "SOFTWARE\Linden Research, Inc."
-!define INSTNAME_KEY    "${LINDEN_KEY}\${INSTNAME}"
-!define MSCURRVER_KEY   "SOFTWARE\Microsoft\Windows\CurrentVersion"
+!define LINDEN_KEY      "SOFTWARE\Stardust Team"
+!define INSTNAME_KEY    "${LINDEN_KEY}\${INSTNAME}"!define MSCURRVER_KEY   "SOFTWARE\Microsoft\Windows\CurrentVersion"
 !define MSNTCURRVER_KEY "SOFTWARE\Microsoft\Windows NT\CurrentVersion"
 !define MSUNINSTALL_KEY "${MSCURRVER_KEY}\Uninstall\${INSTNAME}"
 
@@ -652,16 +651,16 @@ Push $2
 
 # Delete files in \Users\<User>\AppData\Roaming\SecondLife
 # Remove all settings files but leave any other .txt files to preserve the chat logs
-;    RMDir /r "$2\AppData\Roaming\SecondLife\logs"
-    RMDir /r "$2\AppData\Roaming\SecondLife\browser_profile"
-    RMDir /r "$2\AppData\Roaming\SecondLife\user_settings"
-    Delete  "$2\AppData\Roaming\SecondLife\*.xml"
-    Delete  "$2\AppData\Roaming\SecondLife\*.bmp"
-    Delete  "$2\AppData\Roaming\SecondLife\search_history.txt"
-    Delete  "$2\AppData\Roaming\SecondLife\plugin_cookies.txt"
-    Delete  "$2\AppData\Roaming\SecondLife\typed_locations.txt"
+;    RMDir /r "$2\AppData\Roaming\Stardust\logs"
+    RMDir /r "$2\AppData\Roaming\Stardust\browser_profile"
+    RMDir /r "$2\AppData\Roaming\Stardust\user_settings"
+    Delete  "$2\AppData\Roaming\Stardust\*.xml"
+    Delete  "$2\AppData\Roaming\Stardust\*.bmp"
+    Delete  "$2\AppData\Roaming\Stardust\search_history.txt"
+    Delete  "$2\AppData\Roaming\Stardust\plugin_cookies.txt"
+    Delete  "$2\AppData\Roaming\Stardust\typed_locations.txt"
 # Delete files in \Users\<User>\AppData\Local\SecondLife
-    RmDir /r  "$2\AppData\Local\SecondLife"							#Delete the cache folder
+    RmDir /r  "$2\AppData\Local\Stardust"							#Delete the cache folder
 
   CONTINUE:
     IntOp $0 $0 + 1
@@ -676,7 +675,7 @@ Pop $0
 Push $0
   ReadRegStr $0 SHELL_CONTEXT "${MSCURRVER_KEY}\Explorer\Shell Folders" "Common AppData"
   StrCmp $0 "" +2
-  RMDir /r "$0\SecondLife"
+  RMDir /r "$0\Stardust"
 Pop $0
 
 Keep:
@@ -704,14 +703,14 @@ Delete "$INSTDIR\dronesettings.ini"
 Delete "$INSTDIR\message_template.msg"
 Delete "$INSTDIR\newview.pdb"
 Delete "$INSTDIR\newview.map"
-Delete "$INSTDIR\SecondLife.pdb"
-Delete "$INSTDIR\SecondLife.map"
+Delete "$INSTDIR\Stardust.pdb"
+Delete "$INSTDIR\Stardust.map"
 Delete "$INSTDIR\comm.dat"
 Delete "$INSTDIR\*.glsl"
 Delete "$INSTDIR\motions\*.lla"
 Delete "$INSTDIR\trial\*.html"
 Delete "$INSTDIR\newview.exe"
-Delete "$INSTDIR\SecondLife.exe"
+Delete "$INSTDIR\Stardust.exe"
 
 # MAINT-3099 workaround - prevent these log files, if present, from causing a user alert
 Delete "$INSTDIR\VivoxVoiceService-*.log"

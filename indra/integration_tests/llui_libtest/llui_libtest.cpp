@@ -115,7 +115,7 @@ void init_llui()
 #else
 	const char* newview_path = "../../../newview";
 #endif
-	gDirUtilp->initAppDirs("SecondLife", newview_path);
+	gDirUtilp->initAppDirs("Stardust", newview_path);
 	gDirUtilp->setSkinFolder("default", "en");
 	
 	// colors are no longer stored in a LLControlGroup file

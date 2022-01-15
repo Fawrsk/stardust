@@ -151,13 +151,13 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "Linden Lab"
-            VALUE "FileDescription", "Second Life"
+            VALUE "CompanyName", "Stardust Team"
+            VALUE "FileDescription", "Stardust"
             VALUE "FileVersion", "${VIEWER_VERSION_MAJOR}.${VIEWER_VERSION_MINOR}.${VIEWER_VERSION_PATCH}.${VIEWER_VERSION_REVISION}"
-            VALUE "InternalName", "Second Life"
-            VALUE "LegalCopyright", "Copyright (c) 2020, Linden Research, Inc."
-            VALUE "OriginalFilename", "SecondLife.exe"
-            VALUE "ProductName", "Second Life"
+            VALUE "InternalName", "Stardust"
+            VALUE "LegalCopyright", "Copyright (c) 2022, Stardust Team"
+            VALUE "OriginalFilename", "Stardust.exe"
+            VALUE "ProductName", "Stardust"
             VALUE "ProductVersion", "${VIEWER_VERSION_MAJOR}.${VIEWER_VERSION_MINOR}.${VIEWER_VERSION_PATCH}.${VIEWER_VERSION_REVISION}"
         END
     END

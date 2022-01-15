@@ -81,10 +81,13 @@ if (WINDOWS)
     endif (EXISTS ${VIEWER_DIR}win_setup)
 endif (WINDOWS)
 
+# Startup project name for VS
+set(STARTUP_PROJECT_NAME "stardust-bin" CACHE STRING)
+
 # sets the 'startup project' for debugging from visual studio.
 set_property(
     DIRECTORY ${VIEWER_PREFIX}
-    PROPERTY VS_STARTUP_PROJECT secondlife-bin
+    PROPERTY VS_STARTUP_PROJECT ${STARTUP_PROJECT_NAME}
     )
 
 if (USE_BUGSPLAT)
@@ -98,7 +101,7 @@ else (USE_BUGSPLAT)
 endif (USE_BUGSPLAT)
 
 add_subdirectory(${VIEWER_PREFIX}newview)
-add_dependencies(viewer secondlife-bin)
+add_dependencies(viewer ${STARTUP_PROJECT_NAME})
 
 add_subdirectory(${VIEWER_PREFIX}doxygen EXCLUDE_FROM_ALL)
 
