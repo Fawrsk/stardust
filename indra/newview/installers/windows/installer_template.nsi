@@ -100,7 +100,8 @@ AutoCloseWindow true					# After all files install, close window
 
 # Registry key paths, ours and Microsoft's
 !define LINDEN_KEY      "SOFTWARE\Stardust Team"
-!define INSTNAME_KEY    "${LINDEN_KEY}\${INSTNAME}"!define MSCURRVER_KEY   "SOFTWARE\Microsoft\Windows\CurrentVersion"
+!define INSTNAME_KEY    "${LINDEN_KEY}\${INSTNAME}"
+!define MSCURRVER_KEY   "SOFTWARE\Microsoft\Windows\CurrentVersion"
 !define MSNTCURRVER_KEY "SOFTWARE\Microsoft\Windows NT\CurrentVersion"
 !define MSUNINSTALL_KEY "${MSCURRVER_KEY}\Uninstall\${INSTNAME}"
 
