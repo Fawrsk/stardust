@@ -408,6 +408,17 @@ class ViewerManifest(LLManifest):
 
         return os.path.relpath(abspath(path), abspath(base))
 
+    def arg_on_or_off(self, arg):
+        """
+        Returns 'ON' or 'OFF' for an argument.
+        This is to accept all of the boolean values in CMake.
+        """
+        upper = str(self.args[arg]).upper()
+        if upper == 'ON' or upper == 'TRUE' or upper == '1':
+            return 'ON'
+
+        return 'OFF'
+
 
 class WindowsManifest(ViewerManifest):
     # We want the platform, per se, for every Windows build to be 'win'. The
@@ -512,13 +523,13 @@ class WindowsManifest(ViewerManifest):
                 print "Skipping GLOD library (assumming linked statically)"
 
             # Get fmodstudio dll if needed
-            if self.args['fmodstudio'] == 'ON':
+            if self.arg_on_or_off('fmodstudio') == 'ON':
                 if(self.args['configuration'].lower() == 'debug'):
                     self.path("fmodL.dll")
                 else:
                     self.path("fmod.dll")
 
-            if self.args['openal'] == 'ON':
+            if self.arg_on_or_off('openal') == 'ON':
                 # Get openal dll
                 self.path("OpenAL32.dll")
                 self.path("alut.dll")
@@ -1043,7 +1054,7 @@ class DarwinManifest(ViewerManifest):
                     self.path2basename(relpkgdir, libfile)
 
                 # Fmod studio dylibs (vary based on configuration)
-                if self.args['fmodstudio'] == 'ON':
+                if self.arg_on_or_off('fmodstudio') == 'ON':
                     if self.args['configuration'].lower() == 'debug':
                         for libfile in (
                                     "libfmodL.dylib",
@@ -1511,7 +1522,7 @@ class Linux_i686_Manifest(LinuxManifest):
                 print "tcmalloc files not found, skipping"
                 pass
 
-            if self.args['fmodstudio'] == 'ON':
+            if self.arg_on_or_off('fmodstudio') == 'ON':
                 try:
                     self.path("libfmod.so.11.7")
                     self.path("libfmod.so.11")
