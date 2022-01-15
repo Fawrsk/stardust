@@ -76,3 +76,7 @@ trivial_change_force_build
 web/config.*
 web/locale.*
 web/secondlife.com.*
+
+# Virtual environment
+Pipfile
+Pipfile.lock
