@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="all"
+ height="438"
+ label="Protection"
+ layout="topleft"
+ left="102"
+ name="Preference Protection panel"
+ top="1"
+ width="517">
+    <check_box
+        control_name="SDDisableClickToSit"
+        height="16"
+        label="Disable click to sit"
+        layout="topleft"
+        left="13"
+        top="10"
+        name="disable_click_to_sit"
+        tool_tip="Disables click to sit on objects"
+        width="350" />
+</panel>

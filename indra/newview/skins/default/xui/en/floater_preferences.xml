@@ -170,6 +170,13 @@
          layout="topleft"
          help_topic="preferences_controls_tab"
          name="controls" />
+        <panel
+         class="panel_preference"
+         filename="panel_preferences_protection.xml"
+         label="Protection"
+         layout="topleft"
+         help_topic="preferences_protection_tab"
+         name="protection" />
     </tab_container>
 
 </floater>
