@@ -154,21 +154,35 @@ void LLFloaterTexturePicker::setImageID(const LLUUID& image_id, bool set_selecti
 				onModeSelect(0,this);
 			}
 			
-			LLUUID item_id = findItemID(mImageAssetID, FALSE);
+			std::string uuid_str = LLUUID::null.asString();		// Value to set texture_uuid
+			const LLUUID item_id = findItemID(mImageAssetID, FALSE);
 			if (item_id.isNull())
 			{
 				mInventoryPanel->getRootFolder()->clearSelection();
 			}
 			else
 			{
-				LLInventoryItem* itemp = gInventory.getItem(image_id);
-				if (itemp && !itemp->getPermissions().allowCopyBy(gAgent.getID()))
+				const LLInventoryItem* itemp = gInventory.getItem(item_id);
+				if (itemp)
 				{
-					// no copy texture
-					getChild<LLUICtrl>("apply_immediate_check")->setValue(FALSE);
-					mNoCopyTextureSelected = TRUE;
+					const LLUUID agent_id = gAgent.getID();
+					const LLPermissions perms = itemp->getPermissions();
+					if (!perms.allowCopyBy(agent_id))
+					{
+						// no copy texture
+						getChild<LLUICtrl>("apply_immediate_check")->setValue(FALSE);
+						mNoCopyTextureSelected = TRUE;
+					}
+
+					if (!mNoCopyTextureSelected && perms.allowModifyBy(agent_id) && perms.allowOperationBy(PERM_TRANSFER, agent_id))
+					{
+						// Full perms
+						uuid_str = image_id.asString();
+					}
 				}
 			}
+
+			getChild<LLLineEditor>("texture_uuid")->setText(uuid_str);
 
 			if (set_selection)
 			{
@@ -422,6 +436,7 @@ BOOL LLFloaterTexturePicker::postBuild()
 	getChild<LLUICtrl>("Pipette")->setCommitCallback( boost::bind(&LLFloaterTexturePicker::onBtnPipette, this));
 	childSetAction("Cancel", LLFloaterTexturePicker::onBtnCancel,this);
 	childSetAction("Select", LLFloaterTexturePicker::onBtnSelect,this);
+	childSetAction("texture_uuid_btn", LLFloaterTexturePicker::onBtnApply, this);
 
 	// update permission filter once UI is fully initialized
 	updateFilterPermMask();
@@ -698,6 +713,26 @@ void LLFloaterTexturePicker::onBtnSelect(void* userdata)
 		self->mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_SELECT, local_id);
 	}
 	self->closeFloater();
+}
+
+// static
+void LLFloaterTexturePicker::onBtnApply(void* userdata)
+{
+	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*)userdata;
+	std::string texture_uuid = self->getChild<LLLineEditor>("texture_uuid")->getValue().asString();
+	LLUUID image_id;
+	if (LLUUID::parseUUID(texture_uuid, &image_id))
+	{
+		self->setImageID(image_id);
+	}
+	else
+	{
+		self->setImageID(self->mOriginalImageAssetID);
+		if (self->mOnFloaterCommitCallback)
+		{
+			self->mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_CANCEL, LLUUID::null);
+		}
+	}
 }
 
 void LLFloaterTexturePicker::onBtnPipette()
@@ -1115,16 +1150,6 @@ void LLFloaterTexturePicker::onTextureSelect( const LLTextureEntry& te )
 	{
 		LLToolPipette::getInstance()->setResult(TRUE, "");
 		setImageID(te.getID());
-
-		mNoCopyTextureSelected = FALSE;
-		LLInventoryItem* itemp = gInventory.getItem(inventory_item_id);
-
-		if (itemp && !itemp->getPermissions().allowCopyBy(gAgent.getID()))
-		{
-			// no copy texture
-			mNoCopyTextureSelected = TRUE;
-		}
-		
 		commitIfImmediateSet();
 	}
 	else

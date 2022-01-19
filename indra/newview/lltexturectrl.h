@@ -311,6 +311,7 @@ public:
 	static void		onBtnSetToDefault(void* userdata);
 	static void		onBtnSelect(void* userdata);
 	static void		onBtnCancel(void* userdata);
+	static void		onBtnApply(void* userdata);
 	void			onBtnPipette();
 	//static void		onBtnRevert( void* userdata );
 	static void		onBtnBlank(void* userdata);
