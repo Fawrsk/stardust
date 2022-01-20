@@ -742,6 +742,8 @@ BOOL LLAgent::canFly()
 {
 	if (isGodlike()) return TRUE;
 
+	if (gSavedSettings.getBOOL("SDAlwaysAllowFlying")) return TRUE;
+
 	LLViewerRegion* regionp = getRegion();
 	if (regionp && regionp->getBlockFly()) return FALSE;
 	

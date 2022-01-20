@@ -16793,5 +16793,16 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>SDAlwaysAllowFlying</key>
+  <map>
+      <key>Comment</key>
+      <string>Allows you to fly anywhere</string>
+      <key>Persis</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+  </map>
 </map>
 </llsd>
