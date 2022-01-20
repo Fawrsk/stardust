@@ -724,6 +724,10 @@ void LLFloaterTexturePicker::onBtnApply(void* userdata)
 	if (LLUUID::parseUUID(texture_uuid, &image_id))
 	{
 		self->setImageID(image_id);
+		if (self->mOnFloaterCommitCallback)
+		{
+			self->mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_CHANGE, LLUUID::null);
+		}
 	}
 	else
 	{
