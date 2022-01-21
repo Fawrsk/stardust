@@ -209,11 +209,20 @@
     <button
      follows="top|left"
      height="20"
-     label="Up"
+     label="Duplicate"
      layout="topleft"
      left_pad="10"
-     name="up_btn"
+     name="duplicate_btn"
      top_delta="-1"
+     width="70" />
+    <button
+     follows="top|left"
+     height="20"
+     label="Up"
+     layout="topleft"
+     left_delta="0"
+     name="up_btn"
+     top_pad="10"
      width="70" />
     <button
      follows="top|left"

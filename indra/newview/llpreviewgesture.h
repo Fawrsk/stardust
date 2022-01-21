@@ -99,6 +99,8 @@ protected:
 	// Add a step.  Pass the name of the step, like "Animation",
 	// "Sound", "Chat", or "Wait"
 	LLScrollListItem* addStep(const enum EStepType step_type);
+	LLScrollListItem* addStep(LLGestureStep* step);
+	static LLGestureStep* copyStep(LLGestureStep* step);
 	
 	void onVisibilityChanged ( const LLSD& new_visibility );
 
@@ -122,6 +124,7 @@ protected:
 	static void onKeystrokeCommit(LLLineEditor* caller, void* data);
 
 	static void onClickAdd(void* data);
+	static void onClickDuplicate(void* data);
 	static void onClickUp(void* data);
 	static void onClickDown(void* data);
 	static void onClickDelete(void* data);
@@ -143,6 +146,7 @@ private:
 
 	LLScrollListCtrl*	mLibraryList;
 	LLButton*			mAddBtn;
+	LLButton*			mDuplicateBtn;
 	LLButton*			mUpBtn;
 	LLButton*			mDownBtn;
 	LLButton*			mDeleteBtn;

@@ -301,6 +301,7 @@ LLPreviewGesture::LLPreviewGesture(const LLSD& key)
 	mKeyCombo(NULL),
 	mLibraryList(NULL),
 	mAddBtn(NULL),
+	mDuplicateBtn(NULL),
 	mUpBtn(NULL),
 	mDownBtn(NULL),
 	mDeleteBtn(NULL),
@@ -384,6 +385,11 @@ BOOL LLPreviewGesture::postBuild()
 	list->setCommitCallback(onCommitLibrary, this);
 	list->setDoubleClickCallback(onClickAdd, this);
 	mLibraryList = list;
+
+	btn = getChild<LLButton>("duplicate_btn");
+	btn->setClickedCallback(onClickDuplicate, this);
+	btn->setEnabled(FALSE);
+	mDuplicateBtn = btn;
 
 	btn = getChild<LLButton>( "add_btn");
 	btn->setClickedCallback(onClickAdd, this);
@@ -634,6 +640,7 @@ void LLPreviewGesture::refresh()
 		mModifierCombo->setEnabled(FALSE);
 		mKeyCombo->setEnabled(FALSE);
 		mLibraryList->setEnabled(FALSE);
+		mDuplicateBtn->setEnabled(FALSE);
 		mAddBtn->setEnabled(FALSE);
 		mUpBtn->setEnabled(FALSE);
 		mDownBtn->setEnabled(FALSE);
@@ -691,6 +698,7 @@ void LLPreviewGesture::refresh()
 	mModifierCombo->setEnabled(TRUE);
 	mKeyCombo->setEnabled(TRUE);
 
+	mDuplicateBtn->setEnabled(modifiable && have_step);
 	mAddBtn->setEnabled(modifiable && have_library);
 	mUpBtn->setEnabled(modifiable && have_step && step_index > 0);
 	mDownBtn->setEnabled(modifiable && have_step && step_index < step_count-1);
@@ -1290,53 +1298,56 @@ LLMultiGesture* LLPreviewGesture::createGesture()
 	{
 		LLScrollListItem* item = *data_itor;
 		LLGestureStep* step = (LLGestureStep*)item->getUserdata();
+		LLGestureStep* new_step = copyStep(step);
+		if (!new_step) continue;
 
-		switch(step->getType())
-		{
-		case STEP_ANIMATION:
-			{
-				// Copy UI-generated step into actual gesture step
-				LLGestureStepAnimation* anim_step = (LLGestureStepAnimation*)step;
-				LLGestureStepAnimation* new_anim_step =
-					new LLGestureStepAnimation(*anim_step);
-				gesture->mSteps.push_back(new_anim_step);
-				break;
-			}
-		case STEP_SOUND:
-			{
-				// Copy UI-generated step into actual gesture step
-				LLGestureStepSound* sound_step = (LLGestureStepSound*)step;
-				LLGestureStepSound* new_sound_step =
-					new LLGestureStepSound(*sound_step);
-				gesture->mSteps.push_back(new_sound_step);
-				break;
-			}
-		case STEP_CHAT:
-			{
-				// Copy UI-generated step into actual gesture step
-				LLGestureStepChat* chat_step = (LLGestureStepChat*)step;
-				LLGestureStepChat* new_chat_step =
-					new LLGestureStepChat(*chat_step);
-				gesture->mSteps.push_back(new_chat_step);
-				break;
-			}
-		case STEP_WAIT:
-			{
-				// Copy UI-generated step into actual gesture step
-				LLGestureStepWait* wait_step = (LLGestureStepWait*)step;
-				LLGestureStepWait* new_wait_step =
-					new LLGestureStepWait(*wait_step);
-				gesture->mSteps.push_back(new_wait_step);
-				break;
-			}
-		default:
-			{
-				break;
-			}
-		}
+		gesture->mSteps.push_back(new_step);
 	}
 
 	return gesture;
+}
+
+LLGestureStep* LLPreviewGesture::copyStep(LLGestureStep* step)
+{
+	if (!step) return NULL;
+
+	switch (step->getType())
+	{
+	case STEP_ANIMATION:
+	{
+		// Copy UI-generated step into actual gesture step
+		LLGestureStepAnimation* anim_step = (LLGestureStepAnimation*)step;
+		LLGestureStepAnimation* new_anim_step =
+			new LLGestureStepAnimation(*anim_step);
+		return new_anim_step;
+	}
+	case STEP_SOUND:
+	{
+		// Copy UI-generated step into actual gesture step
+		LLGestureStepSound* sound_step = (LLGestureStepSound*)step;
+		LLGestureStepSound* new_sound_step =
+			new LLGestureStepSound(*sound_step);
+		return new_sound_step;
+	}
+	case STEP_CHAT:
+	{
+		// Copy UI-generated step into actual gesture step
+		LLGestureStepChat* chat_step = (LLGestureStepChat*)step;
+		LLGestureStepChat* new_chat_step =
+			new LLGestureStepChat(*chat_step);
+		return new_chat_step;
+	}
+	case STEP_WAIT:
+	{
+		// Copy UI-generated step into actual gesture step
+		LLGestureStepWait* wait_step = (LLGestureStepWait*)step;
+		LLGestureStepWait* new_wait_step =
+			new LLGestureStepWait(*wait_step);
+		return new_wait_step;
+	}
+	}
+
+	return NULL;
 }
 
 
@@ -1571,6 +1582,34 @@ void LLPreviewGesture::onKeystrokeCommit(LLLineEditor* caller,
 }
 
 // static
+void LLPreviewGesture::onClickDuplicate(void* data)
+{
+	LLPreviewGesture* self = (LLPreviewGesture*)data;
+
+	LLScrollListItem* step_item = self->mStepList->getFirstSelected();
+	if (!step_item) return;
+
+	LLGestureStep* step = (LLGestureStep*)step_item->getUserdata();
+	const S32 step_item_index = self->mStepList->getFirstSelectedIndex();
+	if (step && step_item_index >= 0)
+	{
+		LLGestureStep* new_step = copyStep(step);
+		if (!new_step) return;
+
+		LLScrollListItem* new_step_item = self->addStep(new_step);
+		if (new_step_item)
+		{
+			self->mDirty = TRUE;
+			self->refresh();
+		}
+		else
+		{
+			delete new_step;
+		}
+	}
+}
+
+// static
 void LLPreviewGesture::onClickAdd(void* data)
 {
 	LLPreviewGesture* self = (LLPreviewGesture*)data;
@@ -1594,44 +1633,59 @@ void LLPreviewGesture::onClickAdd(void* data)
 	self->refresh();
 }
 
-LLScrollListItem* LLPreviewGesture::addStep( const EStepType step_type )
+LLScrollListItem* LLPreviewGesture::addStep( const EStepType step_type)
 {
 	// Order of enum EStepType MUST match the library_list element in floater_preview_gesture.xml
 
 	LLGestureStep* step = NULL;
-	switch( step_type)
+	switch (step_type)
 	{
-		case STEP_ANIMATION:
-			step = new LLGestureStepAnimation();
-
-			break;
-		case STEP_SOUND:
-			step = new LLGestureStepSound();
-			break;
-		case STEP_CHAT:
-			step = new LLGestureStepChat();	
-			break;
-		case STEP_WAIT:
-			step = new LLGestureStepWait();			
-			break;
-		default:
-			LL_ERRS() << "Unknown step type: " << (S32)step_type << LL_ENDL;
-			return NULL;
+	case STEP_ANIMATION:
+		step = new LLGestureStepAnimation();
+		break;
+	case STEP_SOUND:
+		step = new LLGestureStepSound();
+		break;
+	case STEP_CHAT:
+		step = new LLGestureStepChat();
+		break;
+	case STEP_WAIT:
+		step = new LLGestureStepWait();
+		break;
+	default:
+		LL_ERRS() << "Unknown step type: " << (S32)step_type << LL_ENDL;
+		return NULL;
 	}
 
+	if (!step) return NULL;
+
+	LLScrollListItem* step_item = addStep(step);
+	if (!step_item)
+	{
+		delete step;
+		return NULL;
+	}
+
+	// And move selection to the list on the right
+	mLibraryList->deselectAllItems();
+	mStepList->deselectAllItems();
+	step_item->setSelected(TRUE);
+
+	return step_item;
+}
+
+LLScrollListItem* LLPreviewGesture::addStep(LLGestureStep* step)
+{
+	if (!step) return NULL;
 
 	// Create an enabled item with this step
 	LLSD row;
 	row["columns"][0]["value"] = getLabel(step->getLabel());
 	row["columns"][0]["font"] = "SANSSERIF_SMALL";
 	LLScrollListItem* step_item = mStepList->addElement(row);
+	if (!step_item) return NULL;
+
 	step_item->setUserdata(step);
-
-	// And move selection to the list on the right
-	mLibraryList->deselectAllItems();
-	mStepList->deselectAllItems();
-
-	step_item->setSelected(TRUE);
 
 	return step_item;
 }
