@@ -824,7 +824,7 @@ void LLPanelPeople::updateNearbyList()
 
 	std::vector<LLVector3d> positions;
 
-	LLWorld::getInstance()->getAvatars(&mNearbyList->getIDs(), &positions, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
+	LLWorld::getInstance()->getAvatars(&mNearbyList->getIDs(), &positions);
 	mNearbyList->setDirty();
 
 	DISTANCE_COMPARATOR.updateAvatarsPositions(positions, mNearbyList->getIDs());
