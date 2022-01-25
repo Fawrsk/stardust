@@ -6054,7 +6054,7 @@ class LLWorldTeleportHome : public view_listener_t
 
 static bool confirm_teleport_home(const LLSD& notification, const LLSD& response)
 {
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	const S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option == 0)
 	{
 		gAgent.teleportHome();
