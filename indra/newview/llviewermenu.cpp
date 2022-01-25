@@ -6047,10 +6047,22 @@ class LLWorldTeleportHome : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		gAgent.teleportHome();
+		LLNotificationsUtil::add("SDConfirmTeleportHome");
 		return true;
 	}
 };
+
+static bool confirm_teleport_home(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0)
+	{
+		gAgent.teleportHome();
+	}
+
+	return true;
+}
+static LLNotificationFunctorRegistration confirm_teleport_home_reg("SDConfirmTeleportHome", confirm_teleport_home);
 
 class LLWorldAlwaysRun : public view_listener_t
 {

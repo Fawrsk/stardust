@@ -11777,5 +11777,18 @@ Unable to load the track into [TRACK].
 Unable to load the track from [TRACK1] into [TRACK2].
   <tag>fail</tag>
   </notification>
-  
+
+  <notification
+   icon="alertmodal.tga"
+   name="SDConfirmTeleportHome"
+   type="alertmodal">
+    <unique/>
+Are you sure you want to teleport home?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm before I teleport home"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="Yes"/>
+  </notification>
 </notifications>
