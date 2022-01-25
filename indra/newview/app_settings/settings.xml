@@ -16804,5 +16804,16 @@
       <key>Value</key>
       <integer>0</integer>
   </map>
+  <key>SDCameraSpeed</key>
+  <map>
+      <key>Comment</key>
+      <string>Speed of the camera animations (1-10)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>5</integer>
+  </map>
 </map>
 </llsd>

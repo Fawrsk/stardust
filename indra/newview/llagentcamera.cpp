@@ -2635,8 +2635,10 @@ void LLAgentCamera::setCameraPosAndFocusGlobal(const LLVector3d& camera_pos, con
 	if (mCameraAnimating)
 	{
 		const F64 ANIM_METERS_PER_SECOND = 10.0;
-		const F64 MIN_ANIM_SECONDS = 0.5;
-		const F64 MAX_ANIM_SECONDS = 10.0;
+		static LLCachedControl<U32> camera_speed(gSavedSettings, "SDCameraSpeed", 5);
+		const U32 CAMERA_SPEED_CLAMPED = llmax(1, llmin(10, (S32)camera_speed));
+		const F64 MIN_ANIM_SECONDS = 0.1;
+		const F64 MAX_ANIM_SECONDS = MIN_ANIM_SECONDS + (10 - CAMERA_SPEED_CLAMPED);
 		F64 anim_duration = llmax( MIN_ANIM_SECONDS, sqrt(focus_delta_squared) / ANIM_METERS_PER_SECOND );
 		anim_duration = llmin( anim_duration, MAX_ANIM_SECONDS );
 		setAnimationDuration( (F32)anim_duration );
