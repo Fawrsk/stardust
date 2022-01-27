@@ -223,8 +223,12 @@ void LLProgressView::drawStartTexture(F32 alpha)
 	else
 	{
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-		gGL.color4f(0.f, 0.f, 0.f, 1.f);
-		gl_rect_2d(getRect());
+		static LLCachedControl<bool> hide_teleport_screen(gSavedSettings, "SDHideTeleportScreen");
+		if (!hide_teleport_screen)
+		{
+			gGL.color4f(0.f, 0.f, 0.f, 1.f);
+			gl_rect_2d(getRect());
+		}
 	}
 	gGL.popMatrix();
 }
