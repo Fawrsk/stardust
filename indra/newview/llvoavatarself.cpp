@@ -2795,6 +2795,12 @@ void LLVOAvatarSelf::setHoverOffset(const LLVector3& hover_offset, bool send_upd
 //------------------------------------------------------------------------
 BOOL LLVOAvatarSelf::needsRenderBeam()
 {
+	static LLCachedControl<bool> disable_beam(gSavedSettings, "SDDisableSelectionBeam");
+	if (disable_beam)
+	{
+		return FALSE;
+	}
+
 	LLTool *tool = LLToolMgr::getInstance()->getCurrentTool();
 
 	BOOL is_touching_or_grabbing = (tool == LLToolGrab::getInstance() && LLToolGrab::getInstance()->isEditing());

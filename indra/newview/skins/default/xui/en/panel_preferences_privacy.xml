@@ -102,4 +102,22 @@
      width="300">
        (People and/or Objects you have blocked)
     </text>
+    <check_box
+     control_name="SDDisableLookAt"
+     height="16"
+     label="Disable hover, select, and focus look at targets"
+     layout="topleft"
+     left="30"
+     name="disable_look_at"
+     top_pad="30"
+     width="350" />
+    <check_box
+     control_name="SDDisableSelectionBeam"
+     height="16"
+     label="Disable selection beam"
+     layout="topleft"
+     left="30"
+     name="disable_selection_beam"
+     top_pad="5"
+     width="350" />
     </panel>

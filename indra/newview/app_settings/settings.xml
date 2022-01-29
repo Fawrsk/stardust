@@ -16826,5 +16826,27 @@
       <key>Value</key>
       <integer>0</integer>
   </map>
+  <key>SDDisableLookAt</key>
+  <map>
+      <key>Comment</key>
+      <string>Disables hover, select, and focus look at targets</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+  </map>
+  <key>SDDisableSelectionBeam</key>
+  <map>
+      <key>Comment</key>
+      <string>Disables selection beam</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+  </map>
 </map>
 </llsd>

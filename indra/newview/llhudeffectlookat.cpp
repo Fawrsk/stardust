@@ -39,6 +39,7 @@
 #include "llrendersphere.h"
 #include "llselectmgr.h"
 #include "llglheaders.h"
+#include "llviewercontrol.h"
 #include "llxmltree.h"
 
 
@@ -144,6 +145,9 @@ static BOOL loadGender(LLXmlTreeNode* gender)
 	{
 		return FALSE;
 	}
+
+	const BOOL disable_lookat = gSavedSettings.getBOOL("SDDisableLookAt");
+
 	std::string str;
 	gender->getAttributeString("name", str);
 	LLAttentionSet& attentions = (str.compare("Masculine") == 0) ? gBoyAttentions : gGirlAttentions;
@@ -165,7 +169,15 @@ static BOOL loadGender(LLXmlTreeNode* gender)
 		else return FALSE;
 
 		F32 priority, timeout;
-		attention_node->getAttributeF32("priority", priority);
+		if (disable_lookat &&
+		   (str == "focus" || str == "hover" || str == "select"))
+		{
+			priority = 0.f;
+		}
+		else
+		{
+			attention_node->getAttributeF32("priority", priority);
+		}
 		attention_node->getAttributeF32("timeout", timeout);
 		if(timeout < 0) timeout = MAX_TIMEOUT;
 		attention->mPriority = priority;
@@ -174,10 +186,10 @@ static BOOL loadGender(LLXmlTreeNode* gender)
 	return TRUE;
 }
 
-static BOOL loadAttentions()
+static BOOL loadAttentions(bool reload = false)
 {
 	static BOOL first_time = TRUE;
-	if( ! first_time) 
+	if( ! first_time && !reload)
 	{
 		return TRUE; // maybe not ideal but otherwise it can continue to fail forever.
 	}
@@ -246,6 +258,8 @@ LLHUDEffectLookAt::LLHUDEffectLookAt(const U8 type) :
 	loadAttentions();
 	// initialize current attention set. switches when avatar sex changes.
 	mAttentions = &gGirlAttentions;
+
+	gSavedSettings.getControl("SDDisableLookAt")->getCommitSignal()->connect(boost::bind(&loadAttentions, true));
 }
 
 //-----------------------------------------------------------------------------
